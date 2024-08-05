@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package seerep.pb;
-
-message LabelsWithCategory
-{
-  string category = 1;
-  repeated string labels = 2;
-}

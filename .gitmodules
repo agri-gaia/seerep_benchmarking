@@ -1,5 +1,3 @@
 [submodule "seerep"]
 	path = seerep
-	url = https://github.com/agri-gaia/seerep/
-    branch = performance-analysis-iros
-
+	url = git@github.com:agri-gaia/seerep.git

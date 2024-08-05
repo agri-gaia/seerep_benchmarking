@@ -1,8 +1,0 @@
-
-include "uuids_project_pair.fbs";
-
-namespace seerep.fb;
-
-table UuidsPerProject {
-  uuidsPerProject:[seerep.fb.UuidsProjectPair];
-}

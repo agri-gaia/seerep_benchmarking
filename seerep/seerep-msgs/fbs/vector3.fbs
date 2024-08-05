@@ -1,8 +1,0 @@
-
-namespace seerep.fb;
-
-table Vector3 {
-  x:double;
-  y:double;
-  z:double;
-}
