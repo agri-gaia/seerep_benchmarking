@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "header.proto";
+import "timestamp.proto";
+
+message TimeInterval
+{
+  Header header = 1;
+  Timestamp time_min = 2;
+  Timestamp time_max = 3;
+}

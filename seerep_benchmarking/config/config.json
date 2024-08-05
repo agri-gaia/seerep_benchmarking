@@ -1,0 +1,12 @@
+{
+    "host_dir": "/home/docker/host_dir",
+    "payload_file_name": "payload.mcap",
+    "num_runs": 10,
+    "message_sizes": [
+        614400,
+        4194304
+    ],
+    "total_sizes": [
+        262144000
+    ]
+}

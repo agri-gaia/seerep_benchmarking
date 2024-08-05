@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "point.proto";
+
+message Polygon
+{
+  repeated Point points = 1;
+}

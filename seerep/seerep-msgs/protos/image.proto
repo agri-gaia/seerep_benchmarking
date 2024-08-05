@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "header.proto";
+import "boundingbox2d_labeled_with_category.proto";
+import "labels_with_instance_with_category.proto";
+
+/**
+ * This message contains an uncompressed image
+ * (0, 0) is at top-left corner of image
+ */
+
+message Image
+{
+  /*
+   * Header timestamp should be acquisition time of image
+   * Header frame_id should be optical frame of camera
+   * origin of frame should be optical center of camera
+   * +x should point to the right in the image
+   * +y should point down in the image
+   * +z should point into to plane of the image
+   * If the frame_id here and the frame_id of the CameraInfo
+   * message associated with the image conflict
+   * the behavior is undefined
+   */
+  Header header = 1;
+
+  // image height, that is, number of rows
+  uint32 height = 2;
+
+  // image width, that is, number of columns
+  uint32 width = 3;
+
+  /*
+   * Encoding of pixels -- channel meaning, ordering, size, e.g. rgb8, rgba8, bgr8, bgra8, mono8, mono16
+   * see http://docs.ros.org/en/diamondback/api/sensor_msgs/html/image__encodings_8cpp_source.html
+   */
+  string encoding = 4;
+
+  // is this data bigendian?
+  bool is_bigendian = 5;
+
+  // Full row length in bytes
+  uint32 step = 6;
+  uint32 row_step = 7;
+
+  // actual matrix data, size is (step * rows)
+  bytes data = 8;
+
+  // (optional) labels for the complete image
+  repeated LabelsWithInstanceWithCategory labels_general = 9;
+
+  // (optional) bounding box based labels
+  repeated BoundingBox2DLabeledWithCategory labels_bb = 10;
+}

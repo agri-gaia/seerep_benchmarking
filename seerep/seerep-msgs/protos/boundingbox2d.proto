@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "point2d.proto";
+
+message Boundingbox2D
+{
+  Point2D point_min = 1;
+  Point2D point_max = 2;
+}

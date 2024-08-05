@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "header.proto";
+import "transform.proto";
+
+message TransformStamped
+{
+  Header header = 1;
+  string child_frame_id = 2;
+  Transform transform = 3;
+}

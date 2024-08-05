@@ -1,0 +1,9 @@
+
+include "uuids_per_project.fbs";
+include "query_instance.fbs";
+
+namespace seerep.fb;
+
+rpc_service InstanceService {
+  GetInstances(QueryInstance):seerep.fb.UuidsPerProject;
+}

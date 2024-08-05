@@ -1,0 +1,5 @@
+# ignore benchmark data
+*.csv
+*.hdf5
+*.mcap
+*.png
