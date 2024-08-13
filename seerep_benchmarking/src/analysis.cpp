@@ -112,11 +112,7 @@ runResult saveInMCAP(const std::vector<T>& messages, const std::string& outputDi
 template <typename T>
 runResult saveInHdf5(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
 {
-  std::shared_ptr<std::mutex> writeMutex = std::make_shared<std::mutex>();
-  std::shared_ptr<HighFive::File> file =
-      std::make_shared<HighFive::File>(outputDir + "/hdf5/" + label + ".hdf5",
-                                       HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
-  seerep_hdf5_ros::Hdf5Ros hdf5RosIO(file, writeMutex, "performance-test", "map");
+  seerep_hdf5_ros::Hdf5Ros hdf5RosIO(outputDir + "/hdf5/" + label + ".hdf5", "performance-test", "map");
 
   std::vector<nanoseconds> durations;
   std::vector<double> written_bytes;
@@ -126,7 +122,7 @@ runResult saveInHdf5(const std::vector<T>& messages, const std::string& outputDi
   for (T message : messages)
   {
     auto start_time = hrc::now();
-    hdf5RosIO.saveMessage(message);
+    hdf5RosIO.dump(message);
     auto duration = hrc::now() - start_time;
     auto duration_ns = std::chrono::duration_cast<nanoseconds>(duration);
     durations.push_back(duration_ns);

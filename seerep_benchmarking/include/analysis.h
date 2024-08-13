@@ -9,7 +9,7 @@
 #include <string>
 
 #include "message-generation.h"
-#include "seerep-hdf5-ros/hdf5-ros.h"
+#include "seerep_hdf5_ros/hdf5_ros.h"
 
 using hrc = std::chrono::high_resolution_clock;
 using nanoseconds = std::chrono::nanoseconds;
