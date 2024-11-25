@@ -2,4 +2,6 @@
 *.csv
 *.hdf5
 *.mcap
+*.bag
 *.png
+*.pdf
