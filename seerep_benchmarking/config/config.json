@@ -1,6 +1,6 @@
 {
     "host_dir": "/home/docker/host_dir",
-    "payload_file_name": "payload.mcap",
+    "payload_file_name": "payload.bag",
     "num_runs": 10,
     "message_sizes": [
         10240,

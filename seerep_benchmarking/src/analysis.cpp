@@ -157,7 +157,7 @@ int main(int argc, char** argv)
   config.messageSize = std::strtol(argv[4], 0, 10);
   config.totalSize = std::strtol(argv[5], 0, 10);
 
-  auto messages = generateMessages(config, data);
+  auto messages = generateMessagesPC(config, data);
 
   runResult mcap_result = saveInMCAP(messages, outputDir, label);
   runResult hdf5_result = saveInHdf5(messages, outputDir, label);

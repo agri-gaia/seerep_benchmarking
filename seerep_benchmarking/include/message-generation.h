@@ -2,6 +2,7 @@
 #define MESSAGE_GENERATION_H
 
 #include <sensor_msgs/CompressedImage.h>
+#include <sensor_msgs/PointCloud2.h>
 
 #include <algorithm>
 #include <filesystem>
@@ -26,5 +27,9 @@ std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_
 sensor_msgs::CompressedImage generateMessage(const std::vector<unsigned char>& data);
 
 std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config, const std::vector<unsigned char>& data);
+
+sensor_msgs::PointCloud2 generateMessagePC(const std::vector<unsigned char>& data);
+
+std::vector<sensor_msgs::PointCloud2> generateMessagesPC(const Config& config, const std::vector<unsigned char>& data);
 
 #endif  // MESSAGE_GENERATION_H

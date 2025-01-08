@@ -90,3 +90,55 @@ std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config,
 
   return messages;
 }
+sensor_msgs::PointCloud2 generateMessagePC(const std::vector<unsigned char>& data)
+{
+  sensor_msgs::PointCloud2 message;
+
+  message.header.seq = 1234;
+  message.header.frame_id = "map";
+  message.header.stamp = ros::Time::now();
+  message.height = 621;
+  message.width = 1104;
+  message.is_bigendian = false;
+  message.point_step = 16;
+  message.row_step = 17664;
+  message.is_dense = true; 
+
+  sensor_msgs::PointField pointfield;
+  pointfield.name = "a";
+  pointfield.offset = 2;
+  pointfield.datatype = 0;
+  pointfield.count = 1;
+
+  for(int i = 0; i<4; i++){
+    message.fields.push_back(pointfield);
+  }
+  message.data = std::move(data);
+
+  return message;
+}
+
+std::vector<sensor_msgs::PointCloud2> generateMessagesPC(const Config& config, const std::vector<unsigned char>& data)
+{
+  size_t written_bytes = 0, write_size = 0, offset = 0;
+
+  std::vector<sensor_msgs::PointCloud2> messages;
+  messages.reserve(std::ceil(config.totalSize / config.messageSize));
+
+  while (written_bytes < config.totalSize)
+  {
+    write_size =
+        written_bytes + config.messageSize > config.totalSize ? config.totalSize - written_bytes : config.messageSize;
+
+    auto [message_data, new_offset] = getMessageData(offset, write_size, data);
+    messages.insert(messages.end(), generateMessagePC(message_data));
+
+    offset = new_offset;
+    written_bytes += write_size;
+  }
+
+  auto rng = std::default_random_engine{};
+  std::shuffle(std::begin(messages), std::end(messages), rng);
+
+  return messages;
+}
