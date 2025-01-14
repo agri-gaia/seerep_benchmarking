@@ -4,12 +4,13 @@ cmake_minimum_required(VERSION 3.10)
 project(seerep_benchmarking VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
-add_compile_options(-Wall -Wextra -fPIC)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-add_definitions(-DBOOST_LOG_DYN_LINK)
+
 
 find_package(
   Boost
@@ -17,7 +18,7 @@ find_package(
   REQUIRED
 )
 
-find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp seerep_hdf5_ros)
+find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp seerep_hdf5_ros rosbag)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -69,6 +70,7 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME} src/analysis.cpp src/message-generation.cpp)
+add_executable(rosbag_hdf5_converter src/rosbag-HDF5-converter.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}
@@ -76,6 +78,12 @@ target_link_libraries(
   ${mcap_LIBRARIES}
   ${Boost_LIBRARIES}
   ${zstd_LIBRARIES}
+)
+
+target_link_libraries(
+  rosbag_hdf5_converter
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
 )
 
 install(

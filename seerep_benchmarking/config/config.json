@@ -1,14 +1,15 @@
 {
     "host_dir": "/home/docker/host_dir",
     "payload_file_name": "payload.bag",
-    "num_runs": 10,
+    "num_runs": 50,
     "message_sizes": [
         10240,
         102400,
         614400,
         1048576,
         4194304,
-        6291456
+        6291456,
+        50331648
     ],
     "total_sizes": [
         262144000

@@ -98,7 +98,7 @@ For MCAP add or remove setting from the `mcap::McapWriter`
 [properties](https://bluebrain.github.io/HighFive/group___property_lists.html#ga8877fba7ca191b3b155888a625a764c3)
 would have to be set in the `seerep_hdf5_ros` package.
 
-## Running the Benchmark
+## Running the MCAP-HDF5-Write-Benchmark
 
 In the Docker setup, a bind mount is used for I/O with the host file system.
 To run the previously built image, use:
@@ -138,6 +138,28 @@ To plot already present results, for example after changing some figure settings
 ```bash
 rosrun seerep_benchmarking run.py --plot-only
 ```
+
+## Running the rosbag-HDF5-converter-Benchmark
+To run this benchmark you can also use the docker container as described in the
+previous section. After building the code locally or when using the container the
+converter can be started with the following command:
+
+```bash
+roslaunch seerep_benchmarking rosbag-HDF5-converter.launch
+```
+
+The configuration of the converter benchmark can be changed in `seerep_benchmarking/launch/rosbag-HDF5-converter.launch`.
+
+The results will be printed to the terminal and can be found between the ros outputs.
+They look like this:
+
+```bash
+mean: 5599879736 ns
+mean: 5.59988 s
+standard deviation: 1385599923 ns
+standard deviation: 1385.6 ms
+```
+
 
 ## Reference
 
