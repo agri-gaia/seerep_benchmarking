@@ -122,10 +122,7 @@ class SeerepBenchmarking:
             for directory in ["mcap", "hdf5"]
         ]
 
-        # setup the required output directories
-        for directory in self.data_dirs:
-            if not directory.exists():
-                directory.mkdir()
+        
 
     def run(self) -> None:
         """Run the benchmark for with the provided user configuration."""
@@ -145,6 +142,10 @@ class SeerepBenchmarking:
                 for run in range(self.usr_config["num_runs"]):
                     print(f"Run {run + 1} ...")
                     try:
+                        # setup the required output directories
+                        for directory in self.data_dirs:
+                            if not directory.exists():
+                                directory.mkdir()
                         output = subprocess.run(
                             [
                                 benchmark_path,
@@ -157,6 +158,8 @@ class SeerepBenchmarking:
                             check=True,
                             stdout=subprocess.PIPE,
                         )
+                        for directory in self.data_dirs:
+                            shutil.rmtree(directory)
                     except subprocess.CalledProcessError as e:
                         print(f"Subprocess error while running benchmark: {e}")
                         sys.exit(1)
@@ -355,7 +358,7 @@ def plot_data(
 def main():
     parser = ArgumentParser()
     parser.add_argument(
-        "--plot-only", action="store_true", help="Only plot previously data"
+        "--plot-only", action="store_true", help="Only plot previous data"
     )
     args = parser.parse_args()
 
@@ -380,11 +383,6 @@ def main():
         plot_data(
             df1, df2, df.attrs["title"], benchmark.usr_config["host_dir"], save_img=True
         )
-
-    print("Delete HDF5 and MCAP files?[y/n]")
-    if input().lower() == "y":
-        for directory in benchmark.data_dirs:
-            shutil.rmtree(directory)
 
 
 if __name__ == "__main__":
