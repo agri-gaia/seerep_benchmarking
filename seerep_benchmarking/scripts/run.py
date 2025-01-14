@@ -340,6 +340,7 @@ def plot_data(
     ax.spines["right"].set_visible(False)
     ax.grid(axis="y", linestyle="dashed", linewidth=0.5, alpha=0.65)
     ax.set_axisbelow(True)
+    ax.set_ylim([0, 3.5])
     ax.legend(title="File Format", loc="upper left")
     plt.tight_layout()
 
