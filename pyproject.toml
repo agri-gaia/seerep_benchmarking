@@ -1,0 +1,24 @@
+[tool.ruff]
+line-length = 80
+target-version = 'py38'
+exclude = ["cmake-format.py"]
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # pyflakes
+    "I", # isort
+    "C4", # flake8-comprehensions
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "PL" # pylint
+]
+ignore = [
+    "E402", # module level import not at top of cell
+    "PLR0913", # to many arguments in function definition
+    "PLR2004", # magic value used in comparison
+    "B008", # do not perform function call default argument
+    "PLR0915", # to many statements
+    "B006", # do not use mutable data strucres for arguments defaults
+    "PLR0912" # to many branches
+]
