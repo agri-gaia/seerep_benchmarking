@@ -10,20 +10,23 @@ COPY requirements.txt /tmp/requirements.txt
 
 RUN pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML --no-cache-dir \
 && rm /tmp/requirements.txt
-    
+
 USER docker
 WORKDIR /home/docker
 
 RUN mkdir -p /home/docker/ros_ws/src host_dir
 
 COPY seerep /home/docker/ros_ws/src/seerep
-RUN cd /home/docker/ros_ws && source /opt/ros/noetic/setup.bash && \
+WORKDIR /home/docker/ros_ws
+RUN source /opt/ros/noetic/setup.bash && \
     catkin build seerep_hdf5_ros -DCMAKE_BUILD_TYPE=Release
 
 COPY seerep_benchmarking /home/docker/ros_ws/src/seerep_benchmarking
-RUN cd /home/docker/ros_ws && source /opt/ros/noetic/setup.bash && \
+WORKDIR /home/docker/ros_ws
+RUN source /opt/ros/noetic/setup.bash && \
     catkin build seerep_benchmarking -DCMAKE_BUILD_TYPE=Release
 
+WORKDIR /home/docker
 RUN echo "source /home/docker/ros_ws/devel/setup.bash" >> .bashrc
-    
+
 ENTRYPOINT ["/bin/bash"]

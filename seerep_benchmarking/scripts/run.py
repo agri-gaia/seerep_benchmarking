@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 
+import json
 import math
 import os
 import re
-import subprocess
-import json
-import sys
 import shutil
+import subprocess
+import sys
 from argparse import ArgumentParser
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple, Union, List
-from collections import defaultdict
-import rospkg
+from typing import List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
-
+import rospkg
 
 # utility functions
 
@@ -67,25 +66,27 @@ def string_to_bytes(byte_str: str) -> int:
     return int(split_result[1]) * UNIT_MAP[split_result[2]]
 
 
-def remove_files(dir: Path, extension: str) -> None:
+def remove_files(directory: Path, extension: str) -> None:
     """
     Remove files with a specific extension from a directory.
 
     Args:
-        dir (Path): Directory path.
+        directory (Path): Directory path.
         extension (str): File extension to be removed.
 
     Returns:
         None
     """
-    for file in Path.glob(dir, "*" + extension):
+    for file in Path.glob(directory, "*" + extension):
         try:
             os.remove(file)
         except OSError as e:
             print(f"Error while deleting {file}: {e}")
 
 
-def executable_path(package_name: str, executable_name: str) -> Union[Path, None]:
+def executable_path(
+    package_name: str, executable_name: str
+) -> Union[Path, None]:
     """
     Get the executable path for a given ROS package and executable name.
 
@@ -122,14 +123,14 @@ class SeerepBenchmarking:
             for directory in ["mcap", "hdf5"]
         ]
 
-        
-
     def run(self) -> None:
         """Run the benchmark for with the provided user configuration."""
         payload_path = Path(
             f"{self.usr_config['host_dir']}/{self.usr_config['payload_file_name']}"
         )
-        benchmark_path = executable_path(self.package_name, self.executable_name)
+        benchmark_path = executable_path(
+            self.package_name, self.executable_name
+        )
 
         if benchmark_path == Path("."):
             print("Could not find benchmark executable, source the workspace?")
@@ -179,9 +180,9 @@ def read_csvs(csv_path: Path) -> List[pd.DataFrame]:
     - 10MiB-1000MiB.csv
     - 100MiB-200MiB.csv
 
-    The function will return a list of two pandas DataFrames, where the first DataFrame
-    contains the contents of the first two files and the second DataFrame contains the
-    contents of the last file.
+    The function will return a list of two pandas DataFrames, where the first
+    DataFrame contains the contents of the first two files and the second
+    DataFrame contains the contents of the last file.
 
     Args:
         csv_path (Path): Path to the directory containing the CSV files.
@@ -201,7 +202,9 @@ def read_csvs(csv_path: Path) -> List[pd.DataFrame]:
     # combine the csv files for each total size
     dfs = []
     for key in d.keys():
-        df = pd.concat([pd.read_csv(val).assign(label=val.stem) for val in d[key]])
+        df = pd.concat(
+            [pd.read_csv(val).assign(label=val.stem) for val in d[key]]
+        )
         df.attrs["title"] = key
         dfs.append(df)
     return dfs
@@ -214,8 +217,8 @@ def process_data(df: pd.DataFrame) -> pd.DataFrame:
     Args:
         df (pd.DataFrame): DataFrame to process.
     Returns:
-        pd.DataFrame: A DataFrame containing the mean and standard deviation of the "gb/s" column,
-        grouped by "msg_size", "label" and "file_type".
+        pd.DataFrame: A DataFrame containing the mean and standard deviation of
+        the "gb/s" column, grouped by "msg_size", "label" and "file_type".
     """
     df["write_ns"] = df["write_ns"].apply(lambda x: x / 1e9)
     df.rename(columns={"write_ns": "write_s"}, inplace=True)
@@ -229,9 +232,9 @@ def process_data(df: pd.DataFrame) -> pd.DataFrame:
         lambda x: x.written_gb / x.write_s, axis=1
     )
 
-    df = df.groupby(["label", "msg_size", "file_type"], as_index=False)["gb/s"].agg(
-        ["mean", "std"]
-    )
+    df = df.groupby(["label", "msg_size", "file_type"], as_index=False)[
+        "gb/s"
+    ].agg(["mean", "std"])
 
     df.reset_index(inplace=True)
     df.drop("label", axis=1, inplace=True)
@@ -256,10 +259,12 @@ def set_size(width: float, fraction: float = 1) -> Tuple[float, float]:
 
     Parameters:
         width (float): Width of the figure in points.
-        fraction (float, optional): Fraction of the width to be used. Defaults to 1.
+        fraction (float, optional): Fraction of the width to be used. Defaults
+        to 1.
 
     Returns:
-        Tuple[float, float]: The dimensions of the figure as a tuple of (width, height) in inches.
+        Tuple[float, float]: The dimensions of the figure as a tuple of
+        (width, height) in inches.
     """
 
     # Width of figure (in pts)
@@ -295,7 +300,8 @@ def plot_data(
         df2 (pd.DataFrame): Error data to be plotted as error bars.
         title (str): Title of the plot (only used for the filename).
         output_dir (str): The directory where the plot should be saved.
-        save_img (bool, optional): Whether to save the plot as an image. Defaults to True.
+        save_img (bool, optional): Whether to save the plot as an image.
+        Defaults to True.
 
     Returns:
         None
@@ -382,7 +388,11 @@ def main():
         df1, df2 = process_data(df)
         print(f"Generating plot {i + 1}")
         plot_data(
-            df1, df2, df.attrs["title"], benchmark.usr_config["host_dir"], save_img=True
+            df1,
+            df2,
+            df.attrs["title"],
+            benchmark.usr_config["host_dir"],
+            save_img=True,
         )
 
 

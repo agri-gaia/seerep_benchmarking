@@ -1,5 +1,5 @@
-#catkin_lint: ignore external_file critical_var_append
-#catkin_lint: ignore uninstalled_script
+# catkin_lint: ignore external_file critical_var_append
+# catkin_lint: ignore uninstalled_script
 cmake_minimum_required(VERSION 3.10)
 project(seerep_benchmarking VERSION 0.1)
 
@@ -11,14 +11,19 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
-
 find_package(
   Boost
   COMPONENTS log log_setup
   REQUIRED
 )
 
-find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp seerep_hdf5_ros rosbag)
+find_package(
+  catkin REQUIRED
+  COMPONENTS sensor_msgs
+             roscpp
+             seerep_hdf5_ros
+             rosbag
+)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -81,9 +86,7 @@ target_link_libraries(
 )
 
 target_link_libraries(
-  rosbag_hdf5_converter
-  ${catkin_LIBRARIES}
-  ${Boost_LIBRARIES}
+  rosbag_hdf5_converter ${catkin_LIBRARIES} ${Boost_LIBRARIES}
 )
 
 install(

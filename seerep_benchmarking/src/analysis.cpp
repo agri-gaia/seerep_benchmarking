@@ -2,17 +2,21 @@
 
 mcap::Timestamp now()
 {
-  return mcap::Timestamp(
-      std::chrono::duration_cast<nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+  return mcap::Timestamp(std::chrono::duration_cast<nanoseconds>(
+                             std::chrono::system_clock::now().time_since_epoch())
+                             .count());
 }
 
-runResult summerize_run(std::vector<nanoseconds>& durations, std::vector<double>& written_bytes)
+runResult summerize_run(std::vector<nanoseconds>& durations,
+                        std::vector<double>& written_bytes)
 {
-  return std::make_pair(std::accumulate(durations.begin(), durations.end(), nanoseconds(0)),
-                        std::accumulate(written_bytes.begin(), written_bytes.end(), 0.0));
+  return std::make_pair(
+      std::accumulate(durations.begin(), durations.end(), nanoseconds(0)),
+      std::accumulate(written_bytes.begin(), written_bytes.end(), 0.0));
 }
 
-void save_run(runResult run, const std::string& file_type, const std::string& label, const std::string& csv_path)
+void save_run(runResult run, const std::string& file_type,
+              const std::string& label, const std::string& csv_path)
 {
   bool write_header = false;
   std::ifstream in_file(csv_path);
@@ -33,7 +37,8 @@ void save_run(runResult run, const std::string& file_type, const std::string& la
     {
       out_file << "write_ns,written_bytes,label,file_type\n";
     }
-    out_file << run.first.count() << "," << run.second << "," << label << "," << file_type << "\n";
+    out_file << run.first.count() << "," << run.second << "," << label << ","
+             << file_type << "\n";
   }
   else
   {
@@ -42,7 +47,8 @@ void save_run(runResult run, const std::string& file_type, const std::string& la
 }
 
 template <typename T>
-runResult saveInMCAP(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
+runResult saveInMCAP(const std::vector<T>& messages,
+                     const std::string& outputDir, const std::string& label)
 {
   mcap::McapWriter writer;
 
@@ -60,7 +66,8 @@ runResult saveInMCAP(const std::vector<T>& messages, const std::string& outputDi
   }
 
   // add message schema
-  mcap::Schema imageSchema(ros::message_traits::datatype(messages[0]), "ros1msg",
+  mcap::Schema imageSchema(ros::message_traits::datatype(messages[0]),
+                           "ros1msg",
                            ros::message_traits::Definition<T>::value());
   writer.addSchema(imageSchema);
 
@@ -110,9 +117,11 @@ runResult saveInMCAP(const std::vector<T>& messages, const std::string& outputDi
 }
 
 template <typename T>
-runResult saveInHdf5(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
+runResult saveInHdf5(const std::vector<T>& messages,
+                     const std::string& outputDir, const std::string& label)
 {
-  seerep_hdf5_ros::Hdf5Ros hdf5RosIO(outputDir + "/hdf5/" + label + ".hdf5", "performance-test", "map");
+  seerep_hdf5_ros::Hdf5Ros hdf5RosIO(outputDir + "/hdf5/" + label + ".hdf5",
+                                     "performance-test", "map");
 
   std::vector<nanoseconds> durations;
   std::vector<double> written_bytes;

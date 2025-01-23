@@ -10,15 +10,14 @@
 
   <license>MIT</license>
 
-  <author email="julian.arkenau@dfki.de">Julian Arkenau</author> 
+  <author email="julian.arkenau@dfki.de">Julian Arkenau</author>
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
   <depend>seerep_hdf5_ros</depend>
   <depend>sensor_msgs</depend>
   <depend>roscpp</depend>
-  <depend>rospgky</depend>
   <depend>rosbag</depend>
-  
+
   <buildtool_depend>catkin</buildtool_depend>
 
 </package>

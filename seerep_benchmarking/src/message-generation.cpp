@@ -1,7 +1,8 @@
 #include "message-generation.h"
 
 /**
- * The loadData(...) and the getMessageData(...) functions are taken from the rosbag2_performance package:
+ * The loadData(...) and the getMessageData(...) functions are taken from the
+ * rosbag2_performance package:
  * https://github.com/james-rms/rosbag2/blob/plugin-comparison/rosbag2_performance/rosbag2_storage_plugin_comparison/src/single_benchmark.cpp
  */
 
@@ -12,11 +13,12 @@ std::vector<unsigned char> loadData(const char* filePath)
     throw std::runtime_error("File does not exist");
   }
   std::ifstream file(filePath, std::ios::binary);
-  return std::vector<unsigned char>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+  return std::vector<unsigned char>((std::istreambuf_iterator<char>(file)),
+                                    std::istreambuf_iterator<char>());
 }
 
-std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_t size,
-                                                             const std::vector<unsigned char>& data)
+std::pair<std::vector<unsigned char>, size_t>
+getMessageData(size_t start, size_t size, const std::vector<unsigned char>& data)
 {
   std::vector<unsigned char> output;
   output.reserve(size);
@@ -54,7 +56,8 @@ std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_
 }
 
 // TODO: this could be replaced with a cutom message that only contains a data field
-sensor_msgs::CompressedImage generateMessage(const std::vector<unsigned char>& data)
+sensor_msgs::CompressedImage
+generateMessage(const std::vector<unsigned char>& data)
 {
   sensor_msgs::CompressedImage message;
 
@@ -66,7 +69,8 @@ sensor_msgs::CompressedImage generateMessage(const std::vector<unsigned char>& d
   return message;
 }
 
-std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config, const std::vector<unsigned char>& data)
+std::vector<sensor_msgs::CompressedImage>
+generateMessages(const Config& config, const std::vector<unsigned char>& data)
 {
   size_t written_bytes = 0, write_size = 0, offset = 0;
 
@@ -75,8 +79,9 @@ std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config,
 
   while (written_bytes < config.totalSize)
   {
-    write_size =
-        written_bytes + config.messageSize > config.totalSize ? config.totalSize - written_bytes : config.messageSize;
+    write_size = written_bytes + config.messageSize > config.totalSize ?
+                     config.totalSize - written_bytes :
+                     config.messageSize;
 
     auto [message_data, new_offset] = getMessageData(offset, write_size, data);
     messages.insert(messages.end(), generateMessage(message_data));
@@ -90,7 +95,8 @@ std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config,
 
   return messages;
 }
-sensor_msgs::PointCloud2 generateMessagePC(const std::vector<unsigned char>& data)
+sensor_msgs::PointCloud2
+generateMessagePC(const std::vector<unsigned char>& data)
 {
   sensor_msgs::PointCloud2 message;
 
@@ -102,7 +108,7 @@ sensor_msgs::PointCloud2 generateMessagePC(const std::vector<unsigned char>& dat
   message.is_bigendian = false;
   message.point_step = 16;
   message.row_step = 17664;
-  message.is_dense = true; 
+  message.is_dense = true;
 
   sensor_msgs::PointField pointfield;
   pointfield.name = "a";
@@ -110,7 +116,8 @@ sensor_msgs::PointCloud2 generateMessagePC(const std::vector<unsigned char>& dat
   pointfield.datatype = 0;
   pointfield.count = 1;
 
-  for(int i = 0; i<4; i++){
+  for (int i = 0; i < 4; i++)
+  {
     message.fields.push_back(pointfield);
   }
   message.data = std::move(data);
@@ -118,7 +125,8 @@ sensor_msgs::PointCloud2 generateMessagePC(const std::vector<unsigned char>& dat
   return message;
 }
 
-std::vector<sensor_msgs::PointCloud2> generateMessagesPC(const Config& config, const std::vector<unsigned char>& data)
+std::vector<sensor_msgs::PointCloud2>
+generateMessagesPC(const Config& config, const std::vector<unsigned char>& data)
 {
   size_t written_bytes = 0, write_size = 0, offset = 0;
 
@@ -127,8 +135,9 @@ std::vector<sensor_msgs::PointCloud2> generateMessagesPC(const Config& config, c
 
   while (written_bytes < config.totalSize)
   {
-    write_size =
-        written_bytes + config.messageSize > config.totalSize ? config.totalSize - written_bytes : config.messageSize;
+    write_size = written_bytes + config.messageSize > config.totalSize ?
+                     config.totalSize - written_bytes :
+                     config.messageSize;
 
     auto [message_data, new_offset] = getMessageData(offset, write_size, data);
     messages.insert(messages.end(), generateMessagePC(message_data));

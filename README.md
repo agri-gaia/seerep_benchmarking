@@ -9,9 +9,9 @@ Performance benchmark comparing the HDF5 ROS interface of SEEREP with MCAP.
 - [Installation](#installation)
   - [Docker](#docker)
   - [Locally](#locally)
-- [Running the Benchmark](#running-the-benchmark)
+- [Running the MCAP-HDF5-Write-Benchmark](#running-the-mcap-hdf5-write-benchmark)
+- [Running the rosbag-HDF5-converter-Benchmark](#running-the-rosbag-hdf5-converter-benchmark)
 - [Reference](#reference)
-- [TODO](#todo)
 
 ## Description
 
@@ -60,7 +60,8 @@ docker build -t seerep-benchmarking .
 
 ### Locally
 
-To eliminate any influence from Docker, the benchmark can also be run locally with some additional effort. For that install:
+To eliminate any influence from Docker, the benchmark can also be run locally
+with some additional effort. For that install:
 
 - ROS Noetic (**requires Ubuntu 20.04!**)
 - Catkin
@@ -81,8 +82,8 @@ catkin build seerep_benchmarking -DCMAKE_BUILD_TYPE=Release
 ## Settings
 
 Currently the settings for the benchmark can be changed in the
-[`config.json`](./seerep_benchmarking/config/config.json) file. The following settings are
-available:
+[`config.json`](./seerep_benchmarking/config/config.json) file. The following
+settings are available:
 
 | Parameter | Description |
 |----------|----------|
@@ -92,9 +93,10 @@ available:
 | message_sizes | Array of message sizes (in bytes) to test  |
 | total_sizes  | Array of total data size (in bytes) to use for each run  |
 
-To change the storage options in MCAP and HDF5, the corresponding C++ code has to be adjusted.
-For MCAP add or remove setting from the `mcap::McapWriter`
-[here](https://github.com/agri-gaia/seerep_benchmarking/blob/251cb0f7d9d30bfff530f3f8a7cb8abffda7fb10/seerep_benchmarking/src/analysis.cpp#L47-L53), for HDF5 different
+To change the storage options in MCAP and HDF5, the corresponding C++ code has
+to be adjusted. For MCAP add or remove setting from the `mcap::McapWriter`
+[here](https://github.com/agri-gaia/seerep_benchmarking/blob/251cb0f7d9d30bfff530f3f8a7cb8abffda7fb10/seerep_benchmarking/src/analysis.cpp#L47-L53),
+for HDF5 different
 [properties](https://bluebrain.github.io/HighFive/group___property_lists.html#ga8877fba7ca191b3b155888a625a764c3)
 would have to be set in the `seerep_hdf5_ros` package.
 
@@ -106,19 +108,20 @@ To run the previously built image, use:
 ```bash
 docker run \
     -v {/host/dir}:/home/docker/host_dir \
-    -it seerep-benchmarking 
+    -it seerep-benchmarking
 ```
 
-> [!WARNING]  
+> [!WARNING]
 > Using bind mounts on Windows or MacOS is known to result in slower disk performance.
-> For more information refer to [this article](https://code.visualstudio.com/remote/advancedcontainers/improve-performance).
-> Using named volumes should resolve this issue, though it requires copying data in and out of the
-> volume using `docker cp`.
+> For more information refer to
+> [this article](https://code.visualstudio.com/remote/advancedcontainers/improve-performance).
+> Using named volumes should resolve this issue, though it requires copying data
+> in and out of the volume using `docker cp`.
 
 To run the benchmark use:
 
 ```bash
-rosrun seerep_benchmarking run.py 
+rosrun seerep_benchmarking run.py
 ```
 
 The output should look like:
@@ -133,13 +136,15 @@ Run 3 ...
 
 The resulting csv data and plots will be place in the host directory.
 
-To plot already present results, for example after changing some figure settings use:
+To plot already present results, for example after changing some figure settings
+use:
 
 ```bash
 rosrun seerep_benchmarking run.py --plot-only
 ```
 
 ## Running the rosbag-HDF5-converter-Benchmark
+
 To run this benchmark you can also use the docker container as described in the
 previous section. After building the code locally or when using the container the
 converter can be started with the following command:
@@ -159,7 +164,6 @@ mean: 5.59988 s
 standard deviation: 1385599923 ns
 standard deviation: 1385.6 ms
 ```
-
 
 ## Reference
 

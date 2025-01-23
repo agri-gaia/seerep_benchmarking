@@ -1,11 +1,10 @@
 #ifndef ROSBAG_HDF5_CONVERTER_H
 #define ROSBAG_HDF5_CONVERTER_H
 
-#include "seerep_hdf5_ros/hdf5_ros.h"
-
-
 #include <filesystem>
 #include <fstream>
+
+#include "seerep_hdf5_ros/hdf5_ros.h"
 
 // ros
 #include <ros/console.h>
@@ -34,19 +33,16 @@ class RosbagHDF5Converter
 {
 public:
   RosbagHDF5Converter(const std::string& bagPath,
-               const std::string& hdf5FilePath,
-               const std::string& topicPointcloud,
-               const int iterations
-               );
+                      const std::string& hdf5FilePath,
+                      const std::string& topicPointcloud, const int iterations);
   ~RosbagHDF5Converter();
 
 private:
   void iterateAndDumpPointclouds(const std::string& bagPath,
-               const std::string& outputDir,
-               const std::string& topicPointcloud,
-               const int iterations);
+                                 const std::string& outputDir,
+                                 const std::string& topicPointcloud,
+                                 const int iterations);
   void calcStats(std::vector<std::chrono::nanoseconds> durations);
-
 };
 
 #endif  // ROSBAG_HDF5_CONVERTER_H
