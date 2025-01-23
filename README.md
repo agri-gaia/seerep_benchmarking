@@ -176,7 +176,3 @@ For further details, refer to the related publication at ICRA 2024:
   publisher = {IEEE}
 }
 ```
-
-## TODO
-
-- [ ] Merge up to date version of `seerep_hdf5_ros` into SEEREP main branch
