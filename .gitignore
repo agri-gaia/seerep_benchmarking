@@ -6,3 +6,4 @@
 *.png
 *.pdf
 settings.json
+.catkin_tools
